@@ -20,10 +20,9 @@ RSpec.describe SidekiqAlive::Worker do
     end
 
     it 'does not write the liveliness key' do
-      expect(described_class).to receive(:perform_async).with('some_other_key')
       expect(SidekiqAlive).to receive(:store_alive_key).never
       expect(SidekiqAlive).to receive(:callback).never
-      subject
+      expect { subject }.to raise_error(StandardError, "Not the correct host, will retry")
     end
   end
 end
